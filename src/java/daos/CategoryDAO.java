@@ -5,7 +5,7 @@
  */
 package daos;
 
-import dtos.ParadigmDTO;
+import dtos.CategoryDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,42 +16,37 @@ import java.sql.SQLException;
  *
  * @author Khanh
  */
-public class ParadigmDAO implements Serializable {
+public class CategoryDAO implements Serializable {
 
-   private static final String connectionString = "jdbc:sqlserver://localhost:1433;databaseName=TaoLao";
+    private static final String connectionString = "jdbc:sqlserver://localhost:1433;databaseName=TaoLao";
     private static final String user = "sa";
     private static final String password = "123456";
     private Connection conn;
 
-    public ParadigmDAO() throws ClassNotFoundException, SQLException {
+    public CategoryDAO() throws ClassNotFoundException, SQLException {
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         conn = DriverManager.getConnection(connectionString, user, password);
     }
 
-    public boolean createParadigm(ParadigmDTO dto) {
-        String sql = "INSERT INTO Paradigm(name, size, brand, hard, price, link, image)"
-                + "Values(?,?,?,?,?,?,?)";
+    public boolean createCategory(CategoryDTO dto) {
+        String sql = "INSERT INTO Categories(category, link)"
+                + "Values(?,?)";
         boolean check = false;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             Connection conn = DriverManager.getConnection(connectionString, user, password);
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, dto.getName());
-            ps.setString(2, dto.getSize());
-            ps.setString(3, dto.getBrand());
-            ps.setString(4, dto.getHard());
-            ps.setString(5, dto.getPrice());
-            ps.setString(6, dto.getLink());
-            ps.setString(7, dto.getImage());
+            ps.setString(1, dto.getCategory());
+            ps.setString(2, dto.getLink());
             check = ps.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return check;
     }
-    
+
     public boolean truncate() {
-        String sql = "TRUNCATE TABLE Paradigm;";
+        String sql = "TRUNCATE TABLE Categories;";
         boolean check = false;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -62,6 +57,5 @@ public class ParadigmDAO implements Serializable {
             e.printStackTrace();
         }
         return check;
-    } 
-
+    }
 }

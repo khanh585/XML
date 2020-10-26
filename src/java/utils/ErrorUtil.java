@@ -28,15 +28,18 @@ import java.util.Stack;
  */
 public class ErrorUtil {
 
+    private static final String ERROR_ENTITY_File = "E:\\Study\\webservice_JDBC_XHR\\web\\WEB-INF\\error.txt";
+
     public static void saveLogErrorSAXEntity(String newErrorEntity) {
         newErrorEntity = "&" + newErrorEntity;
         List<String> listError = readLogErrorSAXEntity();
         try {
             if (!listError.contains(newErrorEntity)) {
-                Writer w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("error.txt")));
+                Writer w = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(ERROR_ENTITY_File)));
                 listError.add(newErrorEntity);
                 for (String err : listError) {
-                    w.write(err+"\n");
+                    w.write(err + "\n");
                 }
                 w.close();
             }
@@ -48,7 +51,7 @@ public class ErrorUtil {
     public static List<String> readLogErrorSAXEntity() {
         List<String> result = new ArrayList<>();
         try {
-            File f = new File("error.txt");
+            File f = new File(ERROR_ENTITY_File);
             f.createNewFile();
             BufferedReader br = new BufferedReader(new FileReader(f));
             String line;

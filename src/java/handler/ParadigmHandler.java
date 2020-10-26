@@ -16,41 +16,58 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author Khanh
  */
-public class ParadigmHandler extends DefaultHandler{
+public class ParadigmHandler extends DefaultHandler {
+
     private String curTag;
     private ParadigmDAO dao;
     private ParadigmDTO dto;
-    private boolean isStart;
+    private boolean hadLink;
+    String sp = "";
 
     public ParadigmHandler(ParadigmDAO dao) throws ClassNotFoundException, SQLException {
         this.dao = dao;
-        isStart = false;
+        dao.truncate();
+        hadLink = false;
     }
-    
-    
+
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-        
+
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-//System.out.println("</"+qName+'>');
+        System.out.println(sp + "</" + qName + ">");
+
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-//        System.out.println('<'+qName+'>');
-//        if (qName.equals("li")) {
-//            isStart = true;
+        System.out.println(sp + "<" + qName + ">");
+        int len = attributes.getLength();
+        for (int i = 0; i < len; i++) {
+            System.out.println("-------------" + attributes.getQName(i) +": " +attributes.getValue(i));
+        }
+//        sp += "   ";
+//        if (qName.equals("k10_img")) {
+//            System.out.println(attributes.getValue("src"));
 //        }
-//        if(qName.equals("a") && isStart) {
-//            String link = attributes.getValue("href");
-//            dto = new ParadigmDTO();
-//            dto.setLink(link);
-//            dao.createParadigm(dto);
-//            isStart = false;
+//        switch (qName) {
+//            case "k2li":
+//                hadLink = false;
+//                break;
+//            case "k4a":
+//                if (!hadLink) {
+//                    insertLink(attributes.getValue("href"));
+//                }
+//                break;
 //        }
-//        curTag = qName;
+    }
+
+    public void insertLink(String href) {
+        dto = new ParadigmDTO();
+        dto.setLink(href);
+        dao.createParadigm(dto);
+        hadLink = true;
     }
 }
